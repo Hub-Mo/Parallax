@@ -1,5 +1,5 @@
 ## A long time ago, in a galaxy far, far away...
-![](charachters/rick and morty wars.png)
+![](characters/rick-and-morty-wars.png)
 >it is a period of civil war. Rebel spaceships striking from a hidden base have won
 their first victory against the evil galactic empire.
 
