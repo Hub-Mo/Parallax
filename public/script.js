@@ -7,15 +7,15 @@ let layerSpeed = 4;
 const keys = [];
 
 const layer1 = new Image();
-layer1.src = '../layer-images/1.png';
+layer1.src = 'layer-images/1.png';
 const layer2 = new Image();
-layer2.src = '../layer-images/2.png';
+layer2.src = 'layer-images/2.png';
 const layer4 = new Image();
-layer4.src = '../layer-images/starrs2.png';
+layer4.src = 'layer-images/starrs2.png';
 const layer3 = new Image();
-layer3.src = '../layer-images/startys.png';
+layer3.src = 'layer-images/startys.png';
 const player = new Image();
-player.src = '../characters/ricks-ship.png'
+player.src = 'characters/ricks-ship.png'
 
 
 /*parallax layering class */
@@ -68,7 +68,7 @@ const layers1 = new Layer(layer1, .5);
 const layers2 = new Layer(layer2, .8, 600, 2000);
 //const layers3 = new Layer(layer3, 2.4);
 const layers4 = new Layer(layer4, 1);
-let rick = new Player(player, 5);
+let rick = new Player(player, 2);
 /*making rick ship move*/
 window.addEventListener('keydown', (e) => {
      keys[e.key] = true;
