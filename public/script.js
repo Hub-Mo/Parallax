@@ -16,6 +16,8 @@ const layer3 = new Image();
 layer3.src = 'layer-images/startys.png';
 const player = new Image();
 player.src = 'characters/3.png'
+const fighterJet = new Image();
+fighterJet.src = 'characters/startys.png'
 
 
 
@@ -63,6 +65,9 @@ class Player {
     }
 
 }
+class Enemy extends Player{
+
+}
 
 /*calling the objects*/
 const layers1 = new Layer(layer1, .5);
@@ -79,6 +84,13 @@ window.addEventListener('keyup', (e) => {
     player.src = 'characters/3.png';
 })
 let rick = new Player(player, 2);
+let fighter = new Enemy(fighterJet, 2);
+let fighter1 = new Enemy(fighterJet, 2);
+let fighter2 = new Enemy(fighterJet, 2);
+
+
+
+
 
 
 /*showing in the canvas*/
@@ -92,6 +104,10 @@ function animate(){
     layers2.draw();
     layers4.update();
     layers4.draw();
+    fighter.draw(300, 100)
+    fighter1.draw(150, 100)
+    fighter2.draw(450, 100)
+
     /*player*/
     if(keys['ArrowUp']){
         rick.y -= rick.speed;
