@@ -1,5 +1,6 @@
 body {
-    background: black
+    background: black;
+    transition: 2s;
 }
 
 #canvas {
@@ -11,3 +12,4 @@ body {
     top: 50%;
     left: 50%;
 }
+
