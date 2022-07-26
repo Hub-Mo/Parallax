@@ -15,7 +15,8 @@ layer4.src = 'layer-images/starrs2.png';
 const layer3 = new Image();
 layer3.src = 'layer-images/startys.png';
 const player = new Image();
-player.src = 'characters/ricks-ship.png'
+player.src = 'characters/3.png'
+
 
 
 /*parallax layering class */
@@ -68,7 +69,6 @@ const layers1 = new Layer(layer1, .5);
 const layers2 = new Layer(layer2, .8, 600, 2000);
 //const layers3 = new Layer(layer3, 2.4);
 const layers4 = new Layer(layer4, 1);
-let rick = new Player(player, 2);
 /*making rick ship move*/
 window.addEventListener('keydown', (e) => {
      keys[e.key] = true;
@@ -76,7 +76,10 @@ window.addEventListener('keydown', (e) => {
 })
 window.addEventListener('keyup', (e) => {
     delete keys[e.key];
+    player.src = 'characters/3.png';
 })
+let rick = new Player(player, 2);
+
 
 /*showing in the canvas*/
 
@@ -92,17 +95,23 @@ function animate(){
     /*player*/
     if(keys['ArrowUp']){
         rick.y -= rick.speed;
-    }
-    if(keys['ArrowRight']){
-        rick.x += rick.speed;
+        player.src = 'characters/forward.png';
     }
     if(keys['ArrowLeft']){
         rick.x -= rick.speed;
+        player.src = 'characters/1.png'
     }
     if(keys['ArrowDown']){
         rick.y += rick.speed;
+        player.src = 'characters/goback.png'
+    }
+    if(keys['ArrowRight']){
+        rick.x += rick.speed;
+        player.src = 'characters/2.png';
     }
     rick.draw();
+
+
 
     requestAnimationFrame(animate)
 }
