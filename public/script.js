@@ -1,3 +1,5 @@
+/** @type {HTMLCanvasElement} */
+
 let canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const CANVAS_WIDTH = canvas.width = 700;
@@ -5,6 +7,8 @@ const CANVAS_HEIGHT = canvas.height = 900;
 
 let layerSpeed = 4;
 const keys = [];
+let enemyLevel = 5;
+let enemiesArray = [];
 
 const layer1 = new Image();
 layer1.src = 'layer-images/1.png';
@@ -34,7 +38,6 @@ class Layer {
         this.speed = layerSpeed * this.speedModifier;
     }
     update(){
-        this.speed = layerSpeed * this.speedModifier;
         if(this.y >= 2000){
             this.y = -this.height + this.y2 - this.speed;
         }else this.y += this.speed;
@@ -52,48 +55,82 @@ class Layer {
 /*player class*/
 class Player {
 
-    constructor(image, speed) {
+    constructor(image, speed, x = 300, y = 800) {
         this.image = image;
-        this.x = 300;
-        this.y = 800;
+        this.x = x;
+        this.y = y;
         this.width = 100;
         this.height = 100;
         this.speed = speed;
     }
-    draw(x = this.x, y = this.y) {
-        ctx.drawImage(this.image, x, y, this.width, this.height);
+    draw({x = this.x, y = this.y, width = this.width, height = this.height}) {
+        ctx.drawImage(this.image, x, y, width, height);
     }
 
 }
+/*Enemy class*/
+/*making enemys spawn at height of 400 pixels so player has chance to dodge*/
 class Enemy extends Player{
+    constructor(image, speed = Math.random() * 4 + 1,
+                x = Math.floor(Math.random() * CANVAS_WIDTH),
+                y = Math.floor(Math.random() * 400)) {
+        super(image, speed, x, y);
+        this.angle = Math.random()*2;
+        this.angleSpeed = Math.random()*0.2;
 
+    }
+    update(){
+        this.x += 3 * Math.sin(this.angle)
+        this.angle += this.angleSpeed;
+        this.y+= this.speed
+        if(this.y + this.height > 1000){
+            this.y = -65;
+        }
+    }
 }
+for (i = 0; i < enemyLevel; i++){
+    enemiesArray.push(new Enemy(fighterJet))
+}
+console.log(enemiesArray);
 
 /*calling the objects*/
 const layers1 = new Layer(layer1, .5);
 const layers2 = new Layer(layer2, .8, 600, 2000);
 //const layers3 = new Layer(layer3, 2.4);
 const layers4 = new Layer(layer4, 1);
-/*making rick ship move*/
+/*making Rick's ship move*/
 window.addEventListener('keydown', (e) => {
      keys[e.key] = true;
-    console.log(keys)
 })
 window.addEventListener('keyup', (e) => {
     delete keys[e.key];
     player.src = 'characters/3.png';
 })
+
 let rick = new Player(player, 2);
-let fighter = new Enemy(fighterJet, 2);
-let fighter1 = new Enemy(fighterJet, 2);
-let fighter2 = new Enemy(fighterJet, 2);
-
-
-
-
-
 
 /*showing in the canvas*/
+function moveRick(){
+    if(keys['ArrowUp'] && rick.y > -35){
+        rick.y -= rick.speed;
+        player.src = 'characters/forward.png';
+    }
+    if(keys['ArrowLeft'] && rick.x > -35){
+        rick.x -= rick.speed;
+        player.src = 'characters/1.png'
+    }
+    if(keys['ArrowDown'] && rick.y < 808){
+        rick.y += rick.speed;
+        player.src = 'characters/goback.png'
+    }
+    if(keys['ArrowRight']  && rick.x < 610){
+        rick.x += rick.speed;
+        player.src = 'characters/2.png';
+    }
+}
+
+console.log(canvas.getBoundingClientRect())
+
 
 function animate(){
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -104,30 +141,14 @@ function animate(){
     layers2.draw();
     layers4.update();
     layers4.draw();
-    fighter.draw(300, 100)
-    fighter1.draw(150, 100)
-    fighter2.draw(450, 100)
-
+    /*enemy's*/
+    enemiesArray.forEach(enemy => {
+        enemy.update();
+        enemy.draw({width: 80,height :80});
+    });
     /*player*/
-    if(keys['ArrowUp']){
-        rick.y -= rick.speed;
-        player.src = 'characters/forward.png';
-    }
-    if(keys['ArrowLeft']){
-        rick.x -= rick.speed;
-        player.src = 'characters/1.png'
-    }
-    if(keys['ArrowDown']){
-        rick.y += rick.speed;
-        player.src = 'characters/goback.png'
-    }
-    if(keys['ArrowRight']){
-        rick.x += rick.speed;
-        player.src = 'characters/2.png';
-    }
-    rick.draw();
-
-
+    moveRick()
+    rick.draw({width: 130, height: 130});
 
     requestAnimationFrame(animate)
 }
