@@ -19,9 +19,11 @@ layer4.src = 'layer-images/starrs2.png';
 const layer3 = new Image();
 layer3.src = 'layer-images/startys.png';
 const player = new Image();
-player.src = 'characters/3.png'
+player.src = 'characters/3.png';
 const fighterJet = new Image();
-fighterJet.src = 'characters/startys.png'
+fighterJet.src = 'characters/UpdatedFighter.png';
+const explode = new Image();
+explode.src = "characters/Explodeanim.svg";
 
 
 
@@ -62,6 +64,7 @@ class Player {
         this.width = 100;
         this.height = 100;
         this.speed = speed;
+
     }
     draw({x = this.x, y = this.y, width = this.width, height = this.height}) {
         ctx.drawImage(this.image, x, y, width, height);
@@ -77,6 +80,7 @@ class Enemy extends Player{
         super(image, speed, x, y);
         this.angle = Math.random()*2;
         this.angleSpeed = Math.random()*0.2;
+        this.isDead = false;
 
     }
     update(){
@@ -88,10 +92,10 @@ class Enemy extends Player{
         }
     }
 }
+currentImage = fighterJet;
 for (i = 0; i < enemyLevel; i++){
-    enemiesArray.push(new Enemy(fighterJet))
+    enemiesArray.push(new Enemy(currentImage))
 }
-console.log(enemiesArray);
 
 /*calling the objects*/
 const layers1 = new Layer(layer1, .5);
@@ -107,7 +111,7 @@ window.addEventListener('keyup', (e) => {
     player.src = 'characters/3.png';
 })
 
-let rick = new Player(player, 2);
+let rick = new Player(player, 6);
 
 /*showing in the canvas*/
 function moveRick(){
@@ -129,9 +133,6 @@ function moveRick(){
     }
 }
 
-console.log(canvas.getBoundingClientRect())
-
-
 function animate(){
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
     /*layers*/
@@ -150,6 +151,31 @@ function animate(){
     moveRick()
     rick.draw({width: 130, height: 130});
 
+    collisions();
+    checkIfDead()
+
+
     requestAnimationFrame(animate)
 }
 animate();
+console.log(rick);
+/* collsion recognition */
+function collisions(){
+    enemiesArray.forEach(enemy => {
+        if(rick.x < enemy.x + enemy.width &&
+        rick.x + rick.width > enemy.x &&
+        rick.y < enemy.y + enemy.height &&
+        rick.y + rick.height > enemy.y){
+            rick.isDead = true;
+        }
+    })
+}
+function checkIfDead(){
+    if(rick.isDead){
+        //ctx.drawImage(explode, , 0, 150, 150,  0 , 300 , 200, 250)
+        currentImage = explode;
+        console.log("DEAD")
+        player.src = "characters/Explodeanim.png"
+    }
+}
+
